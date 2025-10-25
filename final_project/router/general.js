@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const express = require('express');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
@@ -28,6 +29,11 @@ public_users.get('/',function (req, res) {
   .then((books) => res.json(books))
   .catch(err => res.status(500).json({message:"something went wrong"}));
   
+=======
+// Get the book list available in the shop
+public_users.get('/', (req, res) => {
+    res.status(200).json(books);
+>>>>>>> 8a5a2743c2aa112aeab6024c96258417339977e1
 });
 
 const getBookByIsbn = (isbn) =>{
@@ -37,6 +43,7 @@ const getBookByIsbn = (isbn) =>{
 }
 
 // Get book details based on ISBN
+<<<<<<< HEAD
 public_users.get('/isbn/:isbn',function (req, res) {
   
    let isbn = req.params.isbn;
@@ -90,3 +97,27 @@ public_users.get('/review/:isbn',function (req, res) {
 });
 
 module.exports.general = public_users;
+=======
+public_users.get('/isbn/:isbn', (req, res) => {
+    const isbn = req.params.isbn;
+    const book = books[isbn];
+    if (!book) return res.status(404).json({ message: "Book not found" });
+    res.status(200).json(book);
+});
+
+// Get books by author
+public_users.get('/author/:author', (req, res) => {
+    const author = req.params.author;
+    const booksByAuthor = Object.values(books).filter(b => b.author === author);
+    if (booksByAuthor.length === 0) return res.status(404).json({ message: "No books found for this author" });
+    res.status(200).json(booksByAuthor);
+});
+
+// Get books by title
+public_users.get('/title/:title', (req, res) => {
+    const title = req.params.title.toLowerCase();
+    const booksByTitle = Object.values(books).filter(b => b.title.toLowerCase().includes(title));
+    if (booksByTitle.length === 0) return res.status(404).json({ message: "No books found with this title" });
+    res.status(200).json(booksByTitle);
+});
+>>>>>>> 8a5a2743c2aa112aeab6024c96258417339977e1
